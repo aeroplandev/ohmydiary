@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="EUC-KR">
+        <title>Oh! My Diary</title>
+        <link rel="stylesheet" th:href="@{styles.css}"/>
+    </head>
+    <body>
+        <h1>Design your intake</h1>
+
+        <form method="POST" th:object="${intake}">
+            <span class="validationError"
+                th:if="${#fields.hasErrors('medications')}"
+                th:errors="*{medications}">Medication Error</span>
+
+            <div class="grid">
+                <div class="medication-group" id="adrenalhormone">
+                    <h3>Select your AdrenalHormone drug:</h3>
+                    <div th:each="medication : ${adrenalhormone}">
+                        <input name="medications" type="checkbox" th:value="${medication.id}"/>
+                        <span th:text="${medication.name}">MEDICATION</span><br/>
+                    </div>
+                </div>
+                <div class="medication-group" id="antiprotozoal">
+                    <h3>Select your Antiprotozoal drug:</h3>
+                    <div th:each="medication : ${antiprotozoal}">
+                        <input name="medications" type="checkbox" th:value="${medication.id}"/>
+                        <span th:text="${medication.name}">MEDICATION</span><br/>
+                    </div>
+                </div>
+                <div class="medication-group" id="circulatorysystem">
+                    <h3>Select your CirculatorySystem drug:</h3>
+                    <div th:each="medication : ${circulatorysystem}">
+                        <input name="medications" type="checkbox" th:value="${medication.id}"/>
+                        <span th:text="${medication.name}">MEDICATION</span><br/>
+                    </div>
+                </div>
+                <div class="medication-group" id="antiinflammatoryanalgesic">
+                    <h3>Select your AntiinflammatoryAnalgesic drug:</h3>
+                    <div th:each="medication : ${antiinflammatoryanalgesic}">
+                        <input name="medications" type="checkbox" th:value="${medication.id}"/>
+                        <span th:text="${medication.name}">MEDICATION</span><br/>
+                    </div>
+                </div>
+                <div class="medication-group" id="pepticulcer">
+                    <h3>Select your PepticUlcer drug:</h3>
+                    <div th:each="medication : ${pepticulcer}">
+                        <input name="medications" type="checkbox" th:value="${medication.id}"/>
+                        <span th:text="${medication.name}">MEDICATION</span><br/>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3>Name your intake creation:</h3>
+                <input type="text" th:field="*{name}"/>
+                <span th:text="${#fields.hasErrors('name')}"
+                      th:errors="*{name}">Name Error</span><br/>
+                <button>Submit your inatake</button>
+            </div>
+        </form>
+    </body>
+</html>
