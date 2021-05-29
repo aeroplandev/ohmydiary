@@ -25,11 +25,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'javax.validation:validation-api'
     implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.5.0'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
+	runtimeOnly (group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '9.2.1.jre11')
 }
 
 test {

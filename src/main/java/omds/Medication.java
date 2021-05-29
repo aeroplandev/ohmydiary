@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class Medication {
-    
+
     private final String id;
     private final String name;
     private final Boolean isPrescripted;
@@ -17,5 +17,11 @@ public class Medication {
     public static enum Type {
         AdrenalHormone, Antiprotozoal, CirculatorySystem, AntiinflammatoryAnalgesic, PepticUlcer 
     }
-    
+/*
+    public Medication(String id, String name, Type type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+*/
 }

@@ -9,6 +9,13 @@
 <body>
     <form method="POST" th:action="@{/prescriptions}" th:object="${prescription}">
         <h1>Place your prescription</h1>
+
+        <ul>
+            <li th:each="intake : ${presciption.intakes}">
+            <span th:text="${intake.name}">intake name</span>
+            </li>
+        </ul>
+
         <a th:href="@{/design}" id="another">Design another presciption</a><br/>
         <div th:if="${#fields.hasErrors()}">
             <span class="validationError">
