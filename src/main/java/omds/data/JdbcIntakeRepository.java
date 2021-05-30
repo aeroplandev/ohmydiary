@@ -43,16 +43,20 @@ public class JdbcIntakeRepository implements IntakeRepository{
 
     private long saveIntakeInfo(Intake intake) {
         intake.setCreatedAt(new Date());
-        PreparedStatementCreator psc = 
+        PreparedStatementCreatorFactory pscf =
             new PreparedStatementCreatorFactory(
-                "insert into Intake (name, createdAt) values (?,?)"
-                , Types.VARCHAR, Types.TIMESTAMP
-            ).newPreparedStatementCreator(
+            "insert into Intake (name, createdAt) values (?,?)"
+            , Types.VARCHAR, Types.TIMESTAMP
+        );
+        pscf.setReturnGeneratedKeys(true);
+        PreparedStatementCreator psc = 
+            pscf.newPreparedStatementCreator(
                 Arrays.asList(
                     intake.getName()
                     , new Timestamp(intake.getCreatedAt().getTime())
                 )
             );
+        
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(psc, keyHolder);
         return keyHolder.getKey().longValue();

@@ -1,7 +1,6 @@
 package omds.web;
 
 import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,15 +40,7 @@ public class DesignIntakeController {
 
     @GetMapping
     public String showDesignForm(Model model) {
-/*
-        List<Medication> medications = Arrays.asList(
-            new Medication("sb", "solondo", true, Type.AdrenalHormone, 5, 2.5)
-            , new Medication("hx", "haloxin", true, Type.Antiprotozoal, 200, 1)
-            , new Medication("lb", "labeone", true, Type.PepticUlcer, 10, 1)
-            , new Medication("ap", "aspirin", true, Type.CirculatorySystem, 100, 1)
-            , new Medication("nx", "naxenf", false, Type.AntiinflammatoryAnalgesic, 500, 1)
-        );
-*/
+
         List<Medication> medications = new ArrayList<>();
         medicationRepo.findAll().forEach(i -> medications.add(i));
 

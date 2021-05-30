@@ -15,7 +15,7 @@ public class Medication {
     private final double tablet;
 
     public static enum Type {
-        AdrenalHormone, Antiprotozoal, CirculatorySystem, AntiinflammatoryAnalgesic, PepticUlcer 
+        AdrenalHormone, AntiProtozoal, CirculatorySystem, AntiInflammatoryAnalgesic, PepticUlcer 
     }
 /*
     public Medication(String id, String name, Type type) {

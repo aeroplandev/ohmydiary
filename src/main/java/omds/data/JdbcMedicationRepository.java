@@ -20,7 +20,7 @@ public class JdbcMedicationRepository implements MedicationRepository{
 
     @Override
     public Iterable<Medication> findAll() {
-        return jdbc.query("select id, name, type from Medacation", this::mapRowToMedication);
+        return jdbc.query("select id, name, type from Medication", this::mapRowToMedication);
     }
 
     @Override

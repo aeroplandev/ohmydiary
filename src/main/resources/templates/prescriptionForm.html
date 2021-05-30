@@ -11,7 +11,7 @@
         <h1>Place your prescription</h1>
 
         <ul>
-            <li th:each="intake : ${presciption.intakes}">
+            <li th:each="intake : ${prescription.intakes}">
             <span th:text="${intake.name}">intake name</span>
             </li>
         </ul>
