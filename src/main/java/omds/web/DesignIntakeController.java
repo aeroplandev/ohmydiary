@@ -78,10 +78,11 @@ public class DesignIntakeController {
         if(errors.hasErrors()){
             return "design";
         }
-        //log.info("processing design: " + design);
+        
+        log.info("processing design: " + design);
 
-        Intake saved = intakeRepo.save(design);
-        prescription.addDesign(saved);
+        Intake intake = intakeRepo.save(design);
+        prescription.addDesign(intake);
         
         return "redirect:/prescriptions/current";
     }

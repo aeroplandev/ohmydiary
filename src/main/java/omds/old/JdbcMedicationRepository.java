@@ -1,4 +1,4 @@
-package omds.data;
+package old;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

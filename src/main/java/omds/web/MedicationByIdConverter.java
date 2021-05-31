@@ -1,5 +1,7 @@
 package omds.web;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,10 @@ public class MedicationByIdConverter implements Converter<String, Medication>{
 
     @Override
     public Medication convert(String id) {
-        return medicationRepo.findById(id);
+        Optional<Medication> optioanlMedication = medicationRepo.findById(id);
+        return optioanlMedication.isPresent() ?
+                    optioanlMedication.get() : null;
+        //return medicationRepo.findById(id);
     }
     
 }
