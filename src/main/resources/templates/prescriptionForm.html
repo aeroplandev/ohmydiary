@@ -9,7 +9,7 @@
 <body>
     <form method="POST" th:action="@{/prescriptions}" th:object="${prescription}">
         <h1>Place your prescription</h1>
-
+        
         <ul>
             <li th:each="intake : ${prescription.intakes}">
             <span th:text="${intake.name}">intake name</span>
