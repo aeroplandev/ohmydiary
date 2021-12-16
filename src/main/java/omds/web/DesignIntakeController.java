@@ -1,89 +1,73 @@
 package omds.web;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.EntityLinks;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import omds.Intake;
-import omds.Medication;
-import omds.Prescription;
-import omds.Medication.Type;
 import omds.data.IntakeRepository;
-import omds.data.MedicationRepository;
 
 @Slf4j
-@Controller
-@RequestMapping("/design")
-@SessionAttributes("prescription")
+@RestController
+@RequestMapping(path="/design", produces="application/json")
+@CrossOrigin(origins="*")
 public class DesignIntakeController {
-    private final MedicationRepository medicationRepo;
     private IntakeRepository intakeRepo;
 
     @Autowired
-    public DesignIntakeController(MedicationRepository medicationRepo, IntakeRepository intakeRepo){
-        this.medicationRepo = medicationRepo;
+    EntityLinks entityLinks;
+    
+    @Autowired
+    public DesignIntakeController(IntakeRepository intakeRepo){
         this.intakeRepo = intakeRepo;
     }
 
-    @GetMapping
-    public String showDesignForm(Model model) {
+    @GetMapping("/recent")
+    public CollectionModel<EntityModel<Intake>> recentIntakes(){
+        PageRequest page = PageRequest.of(0, 12, Sort.by("createdat").descending());
+        List<Intake> intakes =  intakeRepo.findAll(page).getContent();
+        CollectionModel<EntityModel<Intake>> recentCollectionModel = CollectionModel.wrap(intakes);
+        recentCollectionModel.add(
+            WebMvcLinkBuilder.linkTo(DesignIntakeController.class)
+                             .slash("recent")
+                             //.recentIntakes())
+                             .withRel("recents")
+        );
+        return recentCollectionModel;
+    }
 
-        List<Medication> medications = new ArrayList<>();
-        medicationRepo.findAll().forEach(i -> medications.add(i));
-
-        Type[] types = Medication.Type.values();
-        for (Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(), filterByType(medications, type));
+    @GetMapping("/{id}")
+    public ResponseEntity<Intake> intakeById(@PathVariable("id") Long id){
+        Optional<Intake> optIntake = intakeRepo.findById(id);
+        if(optIntake.isPresent()){
+            return new ResponseEntity<>(optIntake.get(), HttpStatus.OK);
         }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
 
-        model.addAttribute("intake", new Intake());
+    @PostMapping(consumes="application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Intake postIntake(@RequestBody Intake intake){
+        return intakeRepo.save(intake);
+    }
+
     
-        return "design";
-    }
-    
-    private List<Medication> filterByType(List<Medication> medications, Type type) {
-        return medications
-                .stream()
-                .filter(x -> x.getType().equals(type))
-                .collect(Collectors.toList()); 
-    }
-
-    @ModelAttribute(name ="prescription")
-    public Prescription prescription(){
-        return new Prescription();
-    }
-
-    @ModelAttribute(name = "intake")
-    public Intake intake(){
-        return new Intake();
-    }
-
-    @PostMapping
-    public String processDesign(@Valid Intake design
-                                , Errors errors
-                                , @ModelAttribute Prescription prescription) {
-        if(errors.hasErrors()){
-            return "design";
-        }
-        
-        log.info("processing design: " + design);
-
-        Intake intake = intakeRepo.save(design);
-        prescription.addDesign(intake);
-        
-        return "redirect:/prescriptions/current";
-    }
-}
+} 
